@@ -1,5 +1,6 @@
 name: Java Build
-permissions: {}
+permissions:
+  pull-requests: write
 
 on:
   push:
@@ -34,3 +35,12 @@ jobs:
           cache: 'maven'
       - name: Build JAR Artifacts
         run: mvn --batch-mode --errors --update-snapshots clean package -Drevision=$(git describe --tags --always)
+      - name: Add coverage to PR
+        # avoid duplicate coverage reports
+        if: matrix.java == 11
+        uses: madrapps/jacoco-report@7ce0d588f6d00dd4a7b63a597383332e0c5c72d0
+        with:
+          paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 50
+          min-coverage-changed-files: 50
