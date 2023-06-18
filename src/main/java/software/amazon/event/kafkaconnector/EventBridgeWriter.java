@@ -13,6 +13,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -299,9 +301,9 @@ public class EventBridgeWriter {
    *
    * @param record Kafka record to be sent to EventBridge
    * @return headers to be added to EventBridge message
-   * @throws JsonProcessingException
+   * @throws IOException
    */
-  private ArrayNode createHeaderArray(SinkRecord record) throws JsonProcessingException {
+  private ArrayNode createHeaderArray(SinkRecord record) throws IOException {
     var headersArray = objectMapper.createArrayNode();
 
     for (Header header : record.headers()) {
@@ -321,9 +323,9 @@ public class EventBridgeWriter {
    *
    * @param jsonBytes - byteArray to convert to JSON
    * @return the JSON representation of jsonBytes
-   * @throws JsonProcessingException
+   * @throws IOException
    */
-  private JsonNode createJSONFromByteArray(byte[] jsonBytes) throws JsonProcessingException {
-    return objectMapper.readTree(new String(jsonBytes, StandardCharsets.UTF_8));
+  private JsonNode createJSONFromByteArray(byte[] jsonBytes) throws IOException {
+    return objectMapper.readTree(jsonBytes);
   }
 }
