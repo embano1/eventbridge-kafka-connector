@@ -67,20 +67,4 @@ public class EventBridgeCredentialsProviderFactoryTest {
     assertThat(provider).isInstanceOf(AwsCredentialsProvider.class);
     assertThat(provider).isExactlyInstanceOf(AwsCredentialProviderImpl.class);
   }
-
-  @Test
-  @Disabled // Todo: Excluded because it is environment specific (Requires no credentials and config
-  // files present to work). Will keep to verify once AWS SDK issue is fixed:
-  // https://github.com/aws/aws-sdk-java-v2/issues/5635
-  public void shouldNotGetSDKClientExceptionWithNull() {
-    var props = new HashMap<>(commonProps);
-    var provider =
-        EventBridgeAwsCredentialsProviderFactory.getAwsCredentialsProvider(
-            new EventBridgeSinkConfig(props));
-    var exception = assertThrows(SdkClientException.class, provider::resolveCredentials);
-
-    assertThat(exception)
-        .hasMessageNotContaining(
-            "Cannot invoke \"java.nio.file.Path.getFileSystem()\" because \"path\" is null");
-  }
 }
